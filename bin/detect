@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+echo "terraform-provider-flynn"
+exit 0
