@@ -7,6 +7,7 @@ Requires
 --------
 
 64bit Linux
+
 Terraform <= 0.12
 
 Usage
