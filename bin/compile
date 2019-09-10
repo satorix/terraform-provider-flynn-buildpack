@@ -4,20 +4,20 @@ set -e          # fail fast
 set -o pipefail # do not ignore exit codes when piping output
 #set -x          # enable debugging
 
-build_dir=$1
-cache_dir=$2
-env_dir=$3
-plugin_dir=$HOME/.terraform.d/plugins
+BUILD_DIR="${1}"
+CACHE_DIR="${2}"
+ENV_DIR="${3}"
+PLUGIN_DIR="${HOME}/.terraform.d/plugins"
 
-bp_dir=$(cd $(dirname $0); cd ..; pwd)
+BP_DIR=$(cd "$(dirname "${0}")"; cd ..; pwd)
 
 # Load some convenience functions like status(), echo(), and indent()
-source $bp_dir/bin/common.sh
+source "${BP_DIR}/bin/common.sh"
 
-mkdir -p $plugin_dir
+mkdir -p "${PLUGIN_DIR}"
 
 # Download terraform-provider-flynn
 status "Download and install terraform-provider-flynn"
-plugin_url="https://github.com/satorix/terraform-provider-flynn/releases/download/v1.0/terraform-provider-flynn"
-curl $plugin_url -s -L -o $plugin_dir/terraform-provider-flynn
-chmod +x $plugin_dir/terraform-provider-flynn
+PLUGIN_URL="https://github.com/satorix/terraform-provider-flynn/releases/download/v1.0/terraform-provider-flynn"
+curl "${PLUGIN_URL}" -s -L -o "${PLUGIN_DIR}/terraform-provider-flynn"
+chmod +x "${PLUGIN_DIR}/terraform-provider-flynn"
