@@ -1,23 +1,35 @@
 #!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir> <env-dir>
 
-set -e          # fail fast
-set -o pipefail # do not ignore exit codes when piping output
-#set -x          # enable debugging
+# Fail immediately on non-zero exit code.
+set -e
+# Fail immediately on non-zero exit code within a pipeline.
+set -o pipefail
+# Fail on undeclared variables.
+set -u
+# Debug, echo every command
+#set -x
 
+# parse and derive params
 BUILD_DIR="${1}"
 CACHE_DIR="${2}"
 ENV_DIR="${3}"
-PLUGIN_DIR="${HOME}/.terraform.d/plugins"
+BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 
-BP_DIR=$(cd "$(dirname "${0}")"; cd ..; pwd)
+# source in common functions
+. "${BIN_DIR}/common.sh"
 
-# Load some convenience functions like status(), echo(), and indent()
-source "${BP_DIR}/bin/common.sh"
+export_env_dir "${ENV_DIR}"
+
+#create the cache dir if it doesn't exist
+mkdir -p "${CACHE_DIR}"
+
+PLUGIN_DIR="${BUILD_DIR}/.terraform.d/plugins"
 
 mkdir -p "${PLUGIN_DIR}"
 
 # Download terraform-provider-flynn
-status "Download and install terraform-provider-flynn"
+topic "Download and install terraform-provider-flynn"
 PLUGIN_URL="https://github.com/satorix/terraform-provider-flynn/releases/download/v1.0/terraform-provider-flynn"
 curl "${PLUGIN_URL}" -s -L -o "${PLUGIN_DIR}/terraform-provider-flynn"
 chmod +x "${PLUGIN_DIR}/terraform-provider-flynn"
